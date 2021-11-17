@@ -1,15 +1,3 @@
-'''
-Created on Mon Sep 27, 2021 - Hamburg 
-
-author: Rasoul Najafi - HSU HH Universität
-
-# Code to generate the zero thickness cohesive elements 
-# This version of the code only supports C3D4 2-dimensional wedge elements
-# Please do not distribute it to the third parties 
-
-'''
-
-
 import pandas as pd
 import numpy as np
 from itertools import groupby,islice
