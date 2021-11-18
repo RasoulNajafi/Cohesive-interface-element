@@ -5,7 +5,7 @@
 
 -  It is possible to simulate the fracture and crack propagation in these zones w.r.t the defined cohesive properties
 
-- This code is most suited for modelling the fracture and crack propagation for brittle materials like concrete
+- This code is most suited for modelling the fracture and crack propagation of brittle materials like concretes
 
 - In the code, I wrote many comments to make it more understandable
 
