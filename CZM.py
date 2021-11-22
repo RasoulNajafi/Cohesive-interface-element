@@ -507,11 +507,11 @@ index_interfelem_inMatrix = []
 for i in range(0, len(matrix_elemTotal)):
     elementx = matrix_elemTotal[0][i]
     xnodes = matrix_elemTotal[2][i].tolist()
-     
+    x_inclusion_id = 0 
     for j in range(1, len(matrix_elemTotal)):
         elementy = matrix_elemTotal[0][j]
         ynodes = matrix_elemTotal[2][j].tolist()
-        
+        y_inclusion_id = 0
         count_commonNodes = 0
         for c in range (0, 3):    # My elements have 3 nodes 
             if xnodes[c] in ynodes:
