@@ -13,4 +13,4 @@
 
 - In the near future I would add another python code which generates cohesive elements in 3D case in Abaqus
 
-- In the Abaqus folder you can find two inp files, the raw one is without cohesive elements and the other is with cohesive elements
+- In the Abaqus folder you can find CZM.inp file, run this file on Abaqus to see the results
