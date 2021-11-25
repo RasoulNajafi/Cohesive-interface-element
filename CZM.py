@@ -1097,45 +1097,108 @@ cohelems_matrix = pd.DataFrame(cohelems_matrix)
 ##############################################################################
 ##############################################################################
 # Step 11: Exporting the new data 
+ 
+newNode_ITZ = np.zeros(shape=(len(czm_ITZ),3))
+for i in range(0, len(czm_ITZ)):
+    node = czm_ITZ['genNode'][i]
+    coord = czm_ITZ['coords'][i]
+    newNode_ITZ[i,0] = node
+    newNode_ITZ[i,1:3] = coord[:2]
+  
+newNode_inclusion = np.zeros(shape=(len(czm_inInclusion),3))
+for i in range(0, len(czm_inInclusion)):
+    node = czm_inInclusion['genNode'][i]
+    coord = czm_inInclusion['coords'][i]
+    newNode_inclusion[i,0] = node
+    newNode_inclusion[i,1:3] = coord[:2]
+ 
+newNode_matrix = np.zeros(shape=(len(czm_inMatrix),3))
+for i in range(0, len(czm_inMatrix)):
+    node = czm_inMatrix['genNode'][i]
+    coord = czm_inMatrix['coords'][i]
+    newNode_matrix[i,0] = node
+    newNode_matrix[i,1:3] = coord[:2] 
+total_newNode = pd.DataFrame(np.concatenate((newNode_ITZ, newNode_inclusion, newNode_matrix), axis=0))
+##########################################################################################################
+ITZ_cohnodes = []
+for i in range(1, 5):
+    for j in range(0,len(cohelems_ITZ)):
+        node = cohelems_ITZ[i][j]
+        index = np.where(total_newNode[0] == node)
+        index = index[0][0]
+        coord1 = total_newNode[1][index]
+        coord2 = total_newNode[2][index]
+        ITZ_cohnodes.append([node, coord1, coord2])
+ITZ_cohnodes = pd.DataFrame(ITZ_cohnodes)        
+np.savetxt('czm_ITZ_node.inp', ITZ_cohnodes, fmt='%d , %10.5f , %10.5f') 
 
-# Step 11-1: Writting the elements with updated connectivity list
+newElem_ITZ = np.zeros(shape=(len(cohelems_ITZ),5))
+for i in range(0, len(cohelems_ITZ)):
+    for j in range(1,5):     
+        newElem_ITZ[i,0] = cohelems_ITZ[0][i]
+        newElem_ITZ[i,j] = cohelems_ITZ[j][i]
+np.savetxt('cohelems_ITZ.inp', newElem_ITZ, fmt='%d,%d,%d,%d,%d')
+     
+matrix_cohnodes = []
+for i in range(1, 5):
+    for j in range(0,len(cohelems_matrix)):
+        node = cohelems_matrix[i][j]
+        index = np.where(total_newNode[0] == node)
+        index = index[0][0]
+        coord1 = total_newNode[1][index]
+        coord2 = total_newNode[2][index]
+        matrix_cohnodes.append([node, coord1, coord2])
+matrix_cohnodes = pd.DataFrame(matrix_cohnodes)        
+np.savetxt('czm_inMatrix_node.inp', matrix_cohnodes, fmt='%d , %10.5f , %10.5f') 
+    
+newElem_matrix = np.zeros(shape=(len(cohelems_matrix),5))
+for i in range(0, len(cohelems_matrix)):
+    for j in range(1,5):     
+        newElem_matrix[i,0] = cohelems_matrix[0][i]
+        newElem_matrix[i,j] = cohelems_matrix[j][i]
+np.savetxt('cohelems_matrix.inp', newElem_matrix, fmt='%d,%d,%d,%d,%d')
+
+inclusion_cohnodes = []
+for i in range(1, 5):
+    for j in range(0,len(cohelems_inclusions)):
+        node = cohelems_inclusions[i][j]
+        index = np.where(total_newNode[0] == node)
+        index = index[0][0]
+        coord1 = total_newNode[1][index]
+        coord2 = total_newNode[2][index]
+        inclusion_cohnodes.append([node, coord1, coord2])
+inclusion_cohnodes = pd.DataFrame(inclusion_cohnodes)        
+np.savetxt('czm_inInclusions_node.inp', inclusion_cohnodes, fmt='%d , %10.5f , %10.5f')  
+
+newElem_inclusion = np.zeros(shape=(len(cohelems_inclusions),5))
+for i in range(0, len(cohelems_inclusions)):
+    for j in range(1,5):     
+        newElem_inclusion[i,0] = cohelems_inclusions[0][i]
+        newElem_inclusion[i,j] = cohelems_inclusions[j][i]
+np.savetxt('cohelems_inclusions.inp', newElem_inclusion, fmt='%d,%d,%d,%d,%d')
+
+
 newElem = np.zeros(shape=(len(elem_newConnList),4))
 for i in range(0, len(elem_newConnList)):
     elem = elem_newConnList[0][i]
     node = elem_newConnList[1][i]     
     newElem[i,0] = elem
     newElem[i,1:4] = np.int_(node)  
-np.savetxt('new_bulkElems.inp', newElem, fmt='%d,%d,%d,%d')
-
-# Step 11-2: Writting the nodes  
-newNode_ITZ = np.zeros(shape=(len(czm_ITZ),4))
-for i in range(0, len(czm_ITZ)):
-    node = czm_ITZ['genNode'][i]
-    coord = czm_ITZ['coords'][i]
-    newNode_ITZ[i,0] = node
-    newNode_ITZ[i,1:4] = coord
-
-newNode_inclusion = np.zeros(shape=(len(czm_inInclusion),4))
-for i in range(0, len(czm_inInclusion)):
-    node = czm_inInclusion['genNode'][i]
-    coord = czm_inInclusion['coords'][i]
-    newNode_inclusion[i,0] = node
-    newNode_inclusion[i,1:4] = coord
-
-newNode_matrix = np.zeros(shape=(len(czm_inMatrix),4))
-for i in range(0, len(czm_inMatrix)):
-    node = czm_inMatrix['genNode'][i]
-    coord = czm_inMatrix['coords'][i]
-    newNode_matrix[i,0] = node
-    newNode_matrix[i,1:4] = coord
-
-newNode = np.concatenate((newNode_ITZ, newNode_inclusion, newNode_matrix), axis=0)
-np.savetxt('new_node.inp', newNode, fmt='%d,%10.5f,%10.5f,%10.5f')
+np.savetxt('Bulk_elems.inp', newElem, fmt='%d,%d,%d,%d')
 
 
-# Step 11-3: Writting the cohesive elements
-cohesive_elems = pd.concat([cohelems_ITZ, cohelems_inclusions, cohelems_matrix], ignore_index=True)
-np.savetxt('cohesive_elements.inp', cohesive_elems, fmt='%d,%d,%d,%d,%d')
+bulkelems_nodes = []
+newElem = pd.DataFrame(newElem)
+for i in range(1, 4):
+    for j in range(0,len(newElem)):
+        node = newElem[i][j]
+        index = np.where(total_newNode[0] == node)
+        index = index[0][0]
+        coord1 = total_newNode[1][index]
+        coord2 = total_newNode[2][index]
+        bulkelems_nodes.append([node, coord1, coord2])
+bulkelems_nodes = pd.DataFrame(bulkelems_nodes)        
+np.savetxt('Bulkelems_node.inp', bulkelems_nodes, fmt='%d , %10.5f , %10.5f')  
 
  
 
