@@ -1,5 +1,5 @@
 # Cohesive-interface-element
-- Python code to generate zero thickness cohesive interface elements (COH2D4) among S3 shell elements in Abaqus
+- Python code to generate zero thickness cohesive interface elements (COH2D4) among three nodes shell elements in Abaqus
 
 - This code generates cohesive elements in three different zones separately, which  are cohesive elements inside the inclusions, inside the matrix and in the ITZ (interfacial transition zone) zone
 
